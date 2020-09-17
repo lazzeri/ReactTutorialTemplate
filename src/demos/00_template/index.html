@@ -10,28 +10,61 @@
 </head>
 <body>
 
-    <div id="container"></div>
+<div id="container"></div>
 
-    <script type="text/babel">
-       let Comment = React.createClass({
-           edit: function(){
-               alert('test');
-           },
-           render: function(){
-             return (
-                 <div className="commentContainer">
-                      <button onClick={this.edit} style={{width: 30, height:30}}> </button>
-                 </div>
-           );
-           }
-       })
-        ReactDOM.render(
-           <div>
-               <Comment> Button Baby </Comment>
-           </div>,
-            document.getElementById('container')
-        );
-    </script>
+<script type="text/babel">
+    let Comment = React.createClass({
+        getInitialState: function () {
+            return {
+                editing: false
+            }
+        },
+        edit: function () {
+            this.setState({editing: true})
+        },
+        save: function () {
+            let val = this.refs.newText.value;
+            console.log(val);
+            this.setState({editing: false})
+        },
+        remove: function () {
+            console.log('removing');
+        },
+        renderNormal: function () {
+            return (
+                <div className="commentContainer">
+                    <div className="commentText">{this.props.children}</div>
+                    <button onClick={this.edit} style={{width: 80, height: 30}}>Edit</button>
+                    <button onClick={this.remove} style={{width: 80, height: 30}}> Remove</button>
+                </div>
+            );
+        },
+        renderForm: function () {
+            return (
+                <div className="commentContainer">
+                    <textarea ref="newText" defaultValue={this.props.children}></textarea>
+                    <button onClick={this.save} className="button-success">Save</button>
+                </div>
+            );
+        },
+
+        render: function () {
+            if (this.state.editing) {
+                return this.renderForm();
+            } else {
+                return this.renderNormal();
+            }
+        }
+    })
+    ReactDOM.render(
+        <div className="board">
+            <Comment> What the fug </Comment>
+            <Comment> Yo dada </Comment>
+            <Comment> Yo mama </Comment>
+        </div>,
+        document.getElementById('container')
+    );
+</script>
 
 </body>
 </html>
